@@ -37,9 +37,11 @@ export default defineComponent({
     const incrementCounter = () => {
       counter.value += 1
       isClicked.value = true
-      setTimeout(() => {
+
+      // Используем requestAnimationFrame для более плавной анимации
+      requestAnimationFrame(() => {
         isClicked.value = false
-      }, 200)
+      })
 
       if (counter.value % 10 === 0) {
         showCongrats.value = true
