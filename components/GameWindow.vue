@@ -1,5 +1,5 @@
 <template>
-  <div class="game-window" @touchstart.prevent>
+  <div class="game-window">
     <h1>{{ counter }}</h1>
     <img
       :src="appleImage"
