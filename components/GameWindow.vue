@@ -47,12 +47,15 @@ export default defineComponent({
           showCongrats.value = false
         }, 3000)
 
-        flyingApples.value = Array.from({ length: 300 }, () => ({
+        const newApples = Array.from({ length: 30 }, () => ({
           x: Math.random() * window.innerWidth - window.innerWidth / 2,
           y: Math.random() * window.innerHeight - window.innerHeight / 2,
         }))
+        flyingApples.value.push(...newApples)
         setTimeout(() => {
-          flyingApples.value = []
+          flyingApples.value = flyingApples.value.filter(
+            (apple) => !newApples.includes(apple)
+          )
         }, 3000) // Увеличиваем время до исчезновения яблок
       }
     }
