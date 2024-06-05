@@ -1,5 +1,5 @@
 <template>
-  <div class="game-window">
+  <div class="game-window" @touchstart.prevent>
     <h1>{{ counter }}</h1>
     <img
       :src="appleImage"
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'GameWindow',
@@ -47,15 +47,27 @@ export default defineComponent({
           showCongrats.value = false
         }, 3000)
 
-        flyingApples.value = Array.from({ length: 30 }, () => ({
-          x: Math.random() * 200 - 100,
-          y: Math.random() * 200 - 100,
+        flyingApples.value = Array.from({ length: 300 }, () => ({
+          x: Math.random() * window.innerWidth - window.innerWidth / 2,
+          y: Math.random() * window.innerHeight - window.innerHeight / 2,
         }))
         setTimeout(() => {
           flyingApples.value = []
         }, 3000) // Увеличиваем время до исчезновения яблок
       }
     }
+
+    onMounted(() => {
+      document.addEventListener(
+        'touchstart',
+        function (event) {
+          if (event.touches.length > 1) {
+            event.preventDefault()
+          }
+        },
+        { passive: false }
+      )
+    })
 
     return {
       appleImage,
