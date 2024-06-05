@@ -67,6 +67,23 @@ export default defineComponent({
         },
         { passive: false }
       )
+
+      let lastTouchEnd = 0
+      document.addEventListener(
+        'touchend',
+        function (event) {
+          const now = new Date().getTime()
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault()
+          }
+          lastTouchEnd = now
+        },
+        false
+      )
+
+      document.addEventListener('gesturestart', function (event) {
+        event.preventDefault()
+      })
     })
 
     return {
@@ -153,15 +170,15 @@ export default defineComponent({
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px; /* Уменьшаем размер вылетающих яблок */
-  height: 20px;
+  width: 40px; /* Уменьшаем размер вылетающих яблок */
+  height: 40px;
   z-index: 5; /* Вылетающие яблоки ниже начального яблока */
   animation: fly 3s ease-in-out; /* Уменьшаем скорость анимации */
 }
 
 .small-apple {
-  width: 20px; /* Уменьшаем размер вылетающих яблок */
-  height: 20px;
+  width: 40px; /* Уменьшаем размер вылетающих яблок */
+  height: 40px;
 }
 
 @keyframes fly {
