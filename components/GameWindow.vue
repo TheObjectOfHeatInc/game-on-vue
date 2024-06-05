@@ -5,7 +5,7 @@
       :src="appleImage"
       alt="Apple"
       class="apple-image"
-      @click="incrementCounter"
+      @pointerdown="incrementCounter"
       :class="{ clicked: isClicked }"
     />
     <div v-if="showCongrats" class="congrats-message">
@@ -38,7 +38,6 @@ export default defineComponent({
       counter.value += 1
       isClicked.value = true
 
-      // Используем requestAnimationFrame для более плавной анимации
       requestAnimationFrame(() => {
         isClicked.value = false
       })
@@ -58,12 +57,11 @@ export default defineComponent({
           flyingApples.value = flyingApples.value.filter(
             (apple) => !newApples.includes(apple)
           )
-        }, 3000) // Увеличиваем время до исчезновения яблок
+        }, 3000)
       }
     }
 
     onMounted(() => {
-      // Предотвращаем увеличение масштаба при двойном нажатии
       let lastTouchEnd = 0
       document.addEventListener(
         'touchend',
@@ -77,12 +75,10 @@ export default defineComponent({
         false
       )
 
-      // Предотвращаем увеличение масштаба при жестах масштабирования
       document.addEventListener('gesturestart', function (event) {
         event.preventDefault()
       })
 
-      // Предотвращаем стандартное поведение при двойном нажатии
       document.addEventListener('dblclick', function (event) {
         event.preventDefault()
       })
@@ -99,108 +95,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.game-window {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #000;
-  color: #fff;
-  box-sizing: border-box;
-}
-
-.apple-image {
-  position: relative;
-  z-index: 10; /* Начальное яблоко выше остальных */
-  max-width: 100px;
-  max-height: 100px;
-  user-select: none;
-  -webkit-user-drag: none;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out; /* Добавляем плавный переход для анимации клика */
-}
-
-.apple-image.clicked {
-  animation: click-animation 0.2s ease-in-out;
-}
-
-@keyframes click-animation {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.congrats-message {
-  position: absolute;
-  bottom: 20px; /* Располагаем сообщение внизу */
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: #fff;
-  border-radius: 5px;
-  animation: fade-in-out 3s ease-in-out;
-}
-
-@keyframes fade-in-out {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.flying-apple {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40px; /* Увеличиваем размер вылетающих яблок */
-  height: 40px;
-  z-index: 5; /* Вылетающие яблоки ниже начального яблока */
-  animation: fly 3s ease-in-out; /* Уменьшаем скорость анимации */
-}
-
-.small-apple {
-  width: 40px; /* Увеличиваем размер вылетающих яблок */
-  height: 40px;
-}
-
-@keyframes fly {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(
-        calc(-50% + var(--random-x)),
-        calc(-50% + var(--random-y))
-      )
-      scale(0.5);
-    opacity: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  .game-window {
-    padding: 10px;
-  }
-}
-</style>
