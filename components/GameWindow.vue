@@ -5,11 +5,20 @@
       :src="appleImage"
       alt="Apple"
       class="apple-image"
-      @mouseover="enlarge"
-      @mouseleave="shrink"
       @click="incrementCounter"
-      :class="{ enlarged: isEnlarged, clicked: isClicked }"
+      :class="{ clicked: isClicked }"
     />
+    <div v-if="showCongrats" class="congrats-message">
+      Поздравляем! Вы нажали на яблоко {{ counter }} раз!
+    </div>
+    <div
+      v-for="(apple, index) in flyingApples"
+      :key="index"
+      class="flying-apple"
+      :style="{ '--random-x': apple.x + 'px', '--random-y': apple.y + 'px' }"
+    >
+      <img :src="appleImage" alt="Flying Apple" class="small-apple" />
+    </div>
   </div>
 </template>
 
@@ -19,34 +28,41 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'GameWindow',
   setup() {
-    const appleImage = ref('/game-on-vue/apple.png') // Обновленный путь к изображению
-    const isEnlarged = ref(false)
+    const appleImage = ref('/game-on-vue/apple.png')
     const isClicked = ref(false)
     const counter = ref(0)
-
-    const enlarge = () => {
-      isEnlarged.value = true
-    }
-
-    const shrink = () => {
-      isEnlarged.value = false
-    }
+    const showCongrats = ref(false)
+    const flyingApples = ref<{ x: number; y: number }[]>([])
 
     const incrementCounter = () => {
       counter.value += 1
       isClicked.value = true
       setTimeout(() => {
         isClicked.value = false
-      }, 200) // Длительность анимации клика
+      }, 200)
+
+      if (counter.value % 10 === 0) {
+        showCongrats.value = true
+        setTimeout(() => {
+          showCongrats.value = false
+        }, 3000)
+
+        flyingApples.value = Array.from({ length: 30 }, () => ({
+          x: Math.random() * 200 - 100,
+          y: Math.random() * 200 - 100,
+        }))
+        setTimeout(() => {
+          flyingApples.value = []
+        }, 3000) // Увеличиваем время до исчезновения яблок
+      }
     }
 
     return {
       appleImage,
-      isEnlarged,
       isClicked,
       counter,
-      enlarge,
-      shrink,
+      showCongrats,
+      flyingApples,
       incrementCounter,
     }
   },
@@ -70,16 +86,14 @@ export default defineComponent({
 }
 
 .apple-image {
+  position: relative;
+  z-index: 10; /* Начальное яблоко выше остальных */
   max-width: 100px;
   max-height: 100px;
   user-select: none;
   -webkit-user-drag: none;
-  transition: transform 0.2s ease-in-out;
   cursor: pointer;
-}
-
-.apple-image.enlarged {
-  transform: scale(1.2);
+  transition: transform 0.2s ease-in-out; /* Добавляем плавный переход для анимации клика */
 }
 
 .apple-image.clicked {
@@ -95,6 +109,61 @@ export default defineComponent({
   }
   100% {
     transform: scale(1);
+  }
+}
+
+.congrats-message {
+  position: absolute;
+  bottom: 20px; /* Располагаем сообщение внизу */
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 5px;
+  animation: fade-in-out 3s ease-in-out;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.flying-apple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; /* Уменьшаем размер вылетающих яблок */
+  height: 20px;
+  z-index: 5; /* Вылетающие яблоки ниже начального яблока */
+  animation: fly 3s ease-in-out; /* Уменьшаем скорость анимации */
+}
+
+.small-apple {
+  width: 20px; /* Уменьшаем размер вылетающих яблок */
+  height: 20px;
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+        calc(-50% + var(--random-x)),
+        calc(-50% + var(--random-y))
+      )
+      scale(0.5);
+    opacity: 0;
   }
 }
 
