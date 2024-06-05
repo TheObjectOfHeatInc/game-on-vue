@@ -62,6 +62,21 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      const preventDefault = (e: Event) => e.preventDefault()
+
+      // Отключение прокрутки
+      document.addEventListener('touchmove', preventDefault, { passive: false })
+      document.addEventListener('touchstart', preventDefault, {
+        passive: false,
+      })
+
+      // Отключение жестов масштабирования
+      document.addEventListener('gesturestart', preventDefault)
+
+      // Отключение стандартного поведения двойного клика
+      document.addEventListener('dblclick', preventDefault)
+
+      // Отключение увеличения при быстром двойном тапе
       let lastTouchEnd = 0
       document.addEventListener(
         'touchend',
@@ -74,14 +89,6 @@ export default defineComponent({
         },
         false
       )
-
-      document.addEventListener('gesturestart', function (event) {
-        event.preventDefault()
-      })
-
-      document.addEventListener('dblclick', function (event) {
-        event.preventDefault()
-      })
     })
 
     return {
@@ -95,3 +102,116 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+body,
+html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Отключаем прокрутку страницы */
+}
+
+.game-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+  box-sizing: border-box;
+  overflow: hidden; /* Отключаем прокрутку внутри контейнера */
+}
+
+.apple-image {
+  position: relative;
+  z-index: 10;
+  max-width: 100px;
+  max-height: 100px;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.apple-image.clicked {
+  animation: click-animation 0.2s ease-in-out;
+}
+
+@keyframes click-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.congrats-message {
+  position: absolute;
+  bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 5px;
+  animation: fade-in-out 3s ease-in-out;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.flying-apple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+  animation: fly 3s ease-in-out;
+}
+
+.small-apple {
+  width: 40px;
+  height: 40px;
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+        calc(-50% + var(--random-x)),
+        calc(-50% + var(--random-y))
+      )
+      scale(0.5);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .game-window {
+    padding: 10px;
+  }
+}
+</style>
