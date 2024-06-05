@@ -2,6 +2,11 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
+  target: 'static', // Генерация статического сайта
+  generate: {
+    dir: 'docs', // Выходная директория для статических файлов
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'test',
