@@ -2,14 +2,12 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
+  // Target: https://go.nuxtjs.dev/config-target
   target: 'static', // Генерация статического сайта
-  generate: {
-    dir: 'docs', // Выходная директория для статических файлов
-  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'test',
+    title: 'game-on-vue',
     htmlAttrs: {
       lang: 'en',
     },
@@ -19,7 +17,9 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/game-on-vue/favicon.ico' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -51,4 +51,14 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // Router configuration for GitHub Pages
+  router: {
+    base: '/game-on-vue/', // Базовый путь для вашего репозитория
+  },
+
+  // Generate configuration for static site
+  generate: {
+    dir: 'docs', // Выходная директория для статических файлов
+  },
 }
