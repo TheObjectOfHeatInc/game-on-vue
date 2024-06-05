@@ -19,6 +19,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/game-on-vue/favicon.ico' },
+      { rel: 'apple-touch-icon', href: '/game-on-vue/apple.png' },
     ],
   },
 

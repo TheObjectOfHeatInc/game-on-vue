@@ -19,7 +19,7 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'GameWindow',
   setup() {
-    const appleImage = ref('/apple.png')
+    const appleImage = ref('/game-on-vue/apple.png') // Обновленный путь к изображению
     const isEnlarged = ref(false)
     const isClicked = ref(false)
     const counter = ref(0)
