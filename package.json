@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "deploy": "yarn generate && git add . && git commit -m '2' && git push",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",

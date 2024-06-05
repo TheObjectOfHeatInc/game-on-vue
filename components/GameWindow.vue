@@ -58,16 +58,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      document.addEventListener(
-        'touchstart',
-        function (event) {
-          if (event.touches.length > 1) {
-            event.preventDefault()
-          }
-        },
-        { passive: false }
-      )
-
+      // Предотвращаем увеличение масштаба при двойном нажатии
       let lastTouchEnd = 0
       document.addEventListener(
         'touchend',
@@ -81,7 +72,13 @@ export default defineComponent({
         false
       )
 
+      // Предотвращаем увеличение масштаба при жестах масштабирования
       document.addEventListener('gesturestart', function (event) {
+        event.preventDefault()
+      })
+
+      // Предотвращаем стандартное поведение при двойном нажатии
+      document.addEventListener('dblclick', function (event) {
         event.preventDefault()
       })
     })
@@ -170,14 +167,14 @@ export default defineComponent({
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 40px; /* Уменьшаем размер вылетающих яблок */
+  width: 40px; /* Увеличиваем размер вылетающих яблок */
   height: 40px;
   z-index: 5; /* Вылетающие яблоки ниже начального яблока */
   animation: fly 3s ease-in-out; /* Уменьшаем скорость анимации */
 }
 
 .small-apple {
-  width: 40px; /* Уменьшаем размер вылетающих яблок */
+  width: 40px; /* Увеличиваем размер вылетающих яблок */
   height: 40px;
 }
 
